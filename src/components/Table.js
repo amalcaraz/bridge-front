@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
@@ -16,6 +16,9 @@ import Rating from '@material-ui/lab/Rating'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import { useDebouncedCallback } from 'use-debounce/lib'
+import { useHistory, generatePath } from 'react-router-dom'
+import { routesMap, RouteId } from '../core/routes'
+import { useItemApi } from '../hooks/useItemApi'
 
 const headCells = [
   { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
@@ -94,7 +97,6 @@ EnhancedTableToolbar.propTypes = {
   onChange: PropTypes.func.isRequired,
 }
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -125,74 +127,54 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function EnhancedTable() {
+export default function EnhancedTable({
+
+
+}) {
   const classes = useStyles()
+  const history = useHistory()
 
   const [q, setQ] = useState(undefined)
   const [order, setOrder] = useState('desc')
   const [orderBy, setOrderBy] = useState('name')
   const [page, setPage] = useState(0)
   const [limit, setLimit] = useState(10)
-  const [data, setData] = useState(undefined)
 
-  useEffect(() => {
-    async function fetchData() {
-      const filters = {}
+  const { data: rows, pagination } = useItemApi({
+    q,
+    page,
+    orderBy,
+    order,
+    limit,
+  })
 
-      if (orderBy && order) {
-
-        filters[`order${capitalize(orderBy)}`] = order
-      }
-
-      if (page) {
-        filters.page = page
-      }
-
-      if (limit) {
-        filters.limit = limit
-      }
-
-      if (q) {
-        filters.q = q
-      }
-
-      const params = new URLSearchParams(filters).toString()
-      const url = `http://localhost:3001/items${params.length ? `?${params}` : ''}`
-
-      const response = await fetch(url)
-      const data = await response.json()
-
-      console.log(url, data)
-      setData(data)
-    }
-
-    fetchData()
-  }, [q, page, orderBy, order, limit, setData])
-
-  const handleRequestSort = (event, property) => {
+  const handleRequestSort = useCallback((event, property) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
     setOrderBy(property)
-  }
+  }, [orderBy, order, setOrder, setOrderBy])
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = useCallback((event, newPage) => {
     setPage(newPage)
-  }
+  }, [setPage])
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = useCallback((event) => {
     const limit = parseInt(event.target.value, 10)
     setLimit(limit)
     setPage(0)
-  }
+  }, [setLimit, setPage])
 
   const handleChangeSearch = useCallback((event) => {
     const q = String(event.target.value)
     setQ(q)
-  }, [])
+  }, [setQ])
 
-  if (!data) return null
+  const handleRowClick = useCallback((id) => {
+    const path = generatePath(routesMap[RouteId.ITEM_DETAIL].path, { id })
+    history.push(path)
+  }, [history, routesMap])
 
-  const { data: rows, pagination } = data
+  if (!rows) return null
 
   return (
     <div className={classes.root}>
@@ -223,6 +205,7 @@ export default function EnhancedTable() {
                       hover
                       tabIndex={-1}
                       key={row.id}
+                      onClick={() => handleRowClick(row.id)}
                     >
                       <TableCell component="th" scope="row">
                         {row.name}
@@ -250,8 +233,4 @@ export default function EnhancedTable() {
       </Paper>
     </div>
   )
-}
-
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.substr(1)
 }
