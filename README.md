@@ -1,5 +1,7 @@
 # Bridge Front
 
+[!Bridge App](https://media.giphy.com/media/rPFjcPtK1jvypZW2Wv/giphy.gif)
+
 ## How to launch it
 
 Run `npm start` to start the application in dev mode and visit [localhost:3000](http://localhost:3000)
