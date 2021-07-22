@@ -41,3 +41,6 @@ a:active, a:visited {
   color: #61dafb;
 }
 
+main {
+  min-height: 80vh;
+}

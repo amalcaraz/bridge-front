@@ -7,8 +7,12 @@ function App() {
   return (
     <section className="App">
       <Router basename="/">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Routes />
+        <header>
+          <img src={logo} className="App-logo" alt="logo" />
+        </header>
+        <main>
+          <Routes />
+        </main>
       </Router>
     </section>
   )

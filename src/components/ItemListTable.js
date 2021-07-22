@@ -21,10 +21,10 @@ const headCells = [
   { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
   { id: 'relevance', numeric: false, disablePadding: false, label: 'Relevance' },
   { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
-  { id: 'manufacturer', numeric: false, disablePadding: false, label: 'Manufacturer' },
+  { id: 'manufacturerName', numeric: false, disablePadding: false, label: 'Manufacturer' },
 ]
 
-function EnhancedTableHeadCell({
+function ItemListTableHeadCell({
   classes,
   order,
   orderBy,
@@ -61,12 +61,12 @@ function EnhancedTableHeadCell({
   )
 }
 
-function EnhancedTableHead(props) {
+function ItemListTableHead(props) {
   return (
     <TableHead>
       <TableRow>
         {headCells.map((headCell) => (
-          <EnhancedTableHeadCell {...{
+          <ItemListTableHeadCell {...{
             key: headCell.id,
             ...props,
             ...headCell
@@ -77,14 +77,14 @@ function EnhancedTableHead(props) {
   )
 }
 
-EnhancedTableHead.propTypes = {
+ItemListTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
   onOrderChange: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
 }
 
-const EnhancedTableToolbar = ({ classes, onChange }) => {
+const ItemListTableToolbar = ({ classes, onChange }) => {
   const handleChange = useDebouncedCallback((event) => {
     const q = String(event.target.value)
     onChange(q)
@@ -109,7 +109,7 @@ const EnhancedTableToolbar = ({ classes, onChange }) => {
   )
 }
 
-EnhancedTableToolbar.propTypes = {
+ItemListTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
 }
@@ -144,12 +144,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function EnhancedTableRow({
+function ItemListTableRow({
   id,
   name,
   relevance,
   price,
-  manufacturer,
+  manufacturerName,
   onClick
 }) {
   const handleOnClick = useCallback(() => onClick(id), [id, onClick])
@@ -168,13 +168,13 @@ function EnhancedTableRow({
         <ItemRelevance id={id} relevance={relevance} />
       </TableCell>
       <TableCell align="right">{price} €</TableCell>
-      <TableCell align="left">{manufacturer}</TableCell>
+      <TableCell align="left">{manufacturerName}</TableCell>
     </TableRow>
   )
 }
 
-export default function EnhancedTable({
-  rows,
+export default function ItemListTable({
+  items,
   pagination,
   order,
   orderBy,
@@ -184,7 +184,7 @@ export default function EnhancedTable({
   onPageChange,
   onLimitChange,
   onSearchChange,
-  onItemClick
+  onItemClick 
 }) {
   const classes = useStyles()
 
@@ -197,12 +197,10 @@ export default function EnhancedTable({
     onPageChange(page)
   }, [onPageChange])
 
-  if (!rows) return null
-
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar
+        <ItemListTableToolbar
           classes={classes}
           onChange={onSearchChange} />
         <TableContainer className={classes.tContainer}>
@@ -213,23 +211,23 @@ export default function EnhancedTable({
             size="medium"
             aria-label="enhanced table"
           >
-            <EnhancedTableHead
+            <ItemListTableHead
               classes={classes}
               order={order}
               orderBy={orderBy}
               onOrderChange={onOrderChange}
             />
             <TableBody>
-              {rows
-                .map(({ id, name, relevance, price, manufacturer }) => {
-                  return <EnhancedTableRow
+              {items
+                .map(({ id, name, relevance, price, manufacturerName }) => {
+                  return <ItemListTableRow
                     {...{
                       key: id,
                       id,
                       name,
                       relevance,
                       price,
-                      manufacturer,
+                      manufacturerName,
                       onClick: onItemClick
                     }}
                   />

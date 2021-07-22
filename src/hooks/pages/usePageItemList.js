@@ -1,9 +1,9 @@
 import { useState, useCallback } from 'react'
 import { useHistory, generatePath } from 'react-router-dom'
-import { routesMap, RouteId } from '../core/routes'
-import { useApiItemList } from './useApiItemList'
+import { routesMap, RouteId } from '../../core/routes'
+import { useApiItemList } from '../useApiItemList'
 
-export function useItemList() {
+export function usePageItemList() {
   const history = useHistory()
 
   const [q, setQ] = useState(undefined)
@@ -13,7 +13,7 @@ export function useItemList() {
   const [limit, setLimit] = useState(10)
   const limitOptions = [5, 10, 25, 50]
 
-  const { data: rows, pagination } = useApiItemList({
+  const { data: items, pagination } = useApiItemList({
     q,
     page,
     orderBy,
@@ -38,7 +38,7 @@ export function useItemList() {
   }, [history, routesMap])
 
   return {
-    rows,
+    items,
     pagination,
     order,
     orderBy,

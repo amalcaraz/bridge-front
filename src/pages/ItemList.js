@@ -1,14 +1,20 @@
 import React from 'react'
+import CircularProgress  from '@material-ui/core/CircularProgress'
 import ItemListTable from '../components/ItemListTable'
-import { useItemList } from '../hooks/useItemList'
+import Page from '../components/Page'
+import { usePageItemList } from '../hooks'
 
 function ItemListPage() {
-  const itemList = useItemList()
+  const pageItemList = usePageItemList()
 
+  if (!pageItemList.items) {
+    return <CircularProgress color="secondary" />
+  }
+console.log(pageItemList)
   return (
-    <>
-      <ItemListTable {...itemList} />
-    </>
+    <Page>
+      <ItemListTable {...pageItemList} />
+    </Page>
   )
 }
 
