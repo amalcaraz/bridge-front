@@ -33,6 +33,10 @@ html, body {
   color: white;
 }
 
+a:active, a:visited {
+  text-decoration: none;
+}
+
 .App-link {
   color: #61dafb;
 }

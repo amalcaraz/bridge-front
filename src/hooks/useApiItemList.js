@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { capitalize } from '../core/common'
 
-export function useItemApi({
+export function useApiItemList({
   q,
   page,
   orderBy,

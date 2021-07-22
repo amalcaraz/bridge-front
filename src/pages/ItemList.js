@@ -1,13 +1,15 @@
 import React from 'react'
-import Table from '../components/Table'
+import ItemListTable from '../components/ItemListTable'
+import { useItemList } from '../hooks/useItemList'
 
-function ItemListPage(props) {
+function ItemListPage() {
+  const itemList = useItemList()
+
   return (
     <>
-      <Table />
+      <ItemListTable {...itemList} />
     </>
   )
 }
-
 
 export default ItemListPage
