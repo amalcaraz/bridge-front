@@ -29,7 +29,7 @@ export default function ItemDetailPage() {
           <Grid item><ManufacturerDetail {...manufacturerDetail} /></Grid>
         </Grid>
       </Paper>
-      <Button to={routesMap[RouteId.ITEM_LIST].path} component={Link} variant="contained" color="white">Go Back</Button>
+      <Button to={routesMap[RouteId.ITEM_LIST].path} component={Link} variant="contained" color="default">Go Back</Button>
     </Page>
   )
 }

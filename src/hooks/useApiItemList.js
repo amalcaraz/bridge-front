@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { capitalize } from '../core/common'
+import config from '../core/config'
 
 export function useApiItemList({
   q,
@@ -32,7 +33,7 @@ export function useApiItemList({
       }
 
       const params = new URLSearchParams(filters).toString()
-      const url = `http://localhost:3001/items${params.length ? `?${params}` : ''}`
+      const url = `${config.apiUrl}/items${params.length ? `?${params}` : ''}`
 
       const response = await fetch(url)
       const data = await response.json()

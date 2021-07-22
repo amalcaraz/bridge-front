@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import config from '../core/config'
 
 export function useApiItemDetail(id) {
   const [data, setData] = useState(undefined)
@@ -7,7 +8,7 @@ export function useApiItemDetail(id) {
     if (!id) return
 
     async function fetchData() {
-      const url = `http://localhost:3001/items/${id}`
+      const url = `${config.apiUrl}/items/${id}`
 
       const response = await fetch(url)
       const data = await response.json()

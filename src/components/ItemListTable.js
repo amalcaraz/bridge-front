@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -16,12 +17,13 @@ import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import { useDebouncedCallback } from 'use-debounce/lib'
 import ItemRelevance from './ItemRelevance'
+import ItemPrice from './ItemPrice'
 
 const headCells = [
-  { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-  { id: 'relevance', numeric: false, disablePadding: false, label: 'Relevance' },
-  { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
-  { id: 'manufacturerName', numeric: false, disablePadding: false, label: 'Manufacturer' },
+  { id: 'name', numeric: false, disablePadding: false, label: 'Name', width: 40 },
+  { id: 'manufacturerName', numeric: false, disablePadding: false, label: 'Manufacturer', width: 40 },
+  { id: 'relevance', numeric: false, disablePadding: false, label: 'Relevance', width: 20 },
+  { id: 'price', numeric: true, disablePadding: false, label: 'Price', width: 20 },
 ]
 
 function ItemListTableHeadCell({
@@ -33,6 +35,7 @@ function ItemListTableHeadCell({
   numeric,
   disablePadding,
   label,
+  width
 }) {
   const handleOnClick = useCallback(() => {
     onOrderChange(id)
@@ -41,6 +44,7 @@ function ItemListTableHeadCell({
   return (
     <TableCell
       key={id}
+      width={`${width}%`}
       align={numeric ? 'right' : 'left'}
       padding={disablePadding ? 'none' : 'normal'}
       sortDirection={orderBy === id ? order : false}
@@ -50,7 +54,7 @@ function ItemListTableHeadCell({
         direction={orderBy === id ? order : 'asc'}
         onClick={handleOnClick}
       >
-        {label}
+        <Typography>{label}</Typography>
         {orderBy === id ? (
           <span className={classes.visuallyHidden}>
             {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -161,14 +165,10 @@ function ItemListTableRow({
       key={id}
       onClick={handleOnClick}
     >
-      <TableCell component="th" scope="row">
-        {name}
-      </TableCell>
-      <TableCell align="left">
-        <ItemRelevance id={id} relevance={relevance} />
-      </TableCell>
-      <TableCell align="right">{price} €</TableCell>
-      <TableCell align="left">{manufacturerName}</TableCell>
+      <TableCell component="th" scope="row"><Typography>{name}</Typography></TableCell>
+      <TableCell align="left"><Typography>{manufacturerName}</Typography></TableCell>
+      <TableCell align="left"><ItemRelevance id={id} relevance={relevance} /></TableCell>
+      <TableCell align="right"><ItemPrice price={price} /></TableCell>
     </TableRow>
   )
 }
@@ -184,7 +184,7 @@ export default function ItemListTable({
   onPageChange,
   onLimitChange,
   onSearchChange,
-  onItemClick 
+  onItemClick
 }) {
   const classes = useStyles()
 

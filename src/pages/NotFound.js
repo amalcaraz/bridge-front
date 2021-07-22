@@ -12,7 +12,7 @@ export default function NotFoundPage() {
       <Paper>
         <Typography align="center">404 / Not Found</Typography>
       </Paper>
-      <Button to={routesMap[RouteId.ITEM_LIST].path} component={Link} variant="contained" color="white">Go Home</Button>
+      <Button to={routesMap[RouteId.ITEM_LIST].path} component={Link} variant="contained" color="default">Go Home</Button>
     </Page>
   )
 }

@@ -10,7 +10,7 @@ function ItemListPage() {
   if (!pageItemList.items) {
     return <CircularProgress color="secondary" />
   }
-console.log(pageItemList)
+
   return (
     <Page>
       <ItemListTable {...pageItemList} />
